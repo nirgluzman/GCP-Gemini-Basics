@@ -68,3 +68,15 @@ async function handleMultiTurnDialogue() {
   const text = response.text();
   console.log(text);
 }
+
+// Text to embeddings.
+// Embedding is a technique used to represent information as a list of floating point numbers in an array.
+// https://ai.google.dev/gemini-api/docs/get-started/tutorial?lang=node#embeddings
+async function generateEmbeddings(text) {
+  // For embeddings, use the embedding-001 model
+  const model = genAI.getGenerativeModel({ model: 'embedding-001' });
+
+  const result = await model.embedContent(text);
+  const embedding = result.embedding;
+  return embedding.values;
+}
