@@ -38,3 +38,33 @@ async function generateTextDescriptionFromImageAndPrompt(prompt, ...images) {
   const response = result.response;
   return response.text();
 }
+
+// Build multi-turn conversations (chat)
+// https://ai.google.dev/gemini-api/docs/get-started/tutorial?lang=node#multi-turn-conversations-chat
+async function handleMultiTurnDialogue() {
+  // The Gemini 1.5 models are versatile and work with multi-turn conversations (like chat)
+  const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+
+  const chat = model.startChat({
+    history: [
+      {
+        role: 'user', // the role which provides the prompts
+        parts: [{ text: 'Hello, I have 2 dogs in my house.' }]
+      },
+      {
+        role: 'model', // the role which provides the responses
+        parts: [{ text: 'Great to meet you. What would you like to know?' }]
+      }
+    ],
+    generationConfig: {
+      maxOutputTokens: 100
+    }
+  });
+
+  const msg = 'How many paws are in my house?';
+
+  const result = await chat.sendMessage(msg);
+  const response = await result.response;
+  const text = response.text();
+  console.log(text);
+}
